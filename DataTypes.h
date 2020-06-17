@@ -1,4 +1,5 @@
 #pragma once
+#include <metahost.h>
 
 struct Point {
     double X;

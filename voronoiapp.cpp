@@ -1,6 +1,5 @@
 #include <QtWidgets>
 #include "voronoiapp.h"
-#include "line.h"
 #include "loadassembly.h"
 #include "DataTypes.h"
 
@@ -78,7 +77,7 @@ VoronoiApp::VoronoiApp(QWidget *parent) : QWidget(parent)
     pen->setWidth(2);
     pen->setColor(QColor(255,0,0,255));
     painter->setPen(*pen);
-    painter->drawPoint(QPoint(50,50));
+    //painter->drawPoint(QPoint(50,50));
 
 
     // Add pixmap to label after drawing
@@ -202,6 +201,8 @@ void VoronoiApp::useAssembly() {
         for(auto i = 0; i<lineCount; i++)
         {
             wprintf(L"Line #%d : X1=%f/X2=%f/Y1=%f/Y2=%f\n", i, lines[i].Point1.X, lines[i].Point2.X, lines[i].Point1.Y, lines[i].Point2.Y);
+            painter->drawLine((int)lines[i].Point1.X, (int)lines[i].Point2.X, (int)lines[i].Point1.Y, (int)lines[i].Point2.Y);
+            pixLabel->setPixmap(*pixmap);
         }
 
         // Perform CLR cleanup

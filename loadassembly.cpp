@@ -2,7 +2,6 @@
 #include <iostream>
 #include <metahost.h>
 #include <mscoree.h>
-#pragma comment(lib, "mscoree.lib")
 #include "DataTypes.h"
 
 LoadAssembly::LoadAssembly()
@@ -13,7 +12,7 @@ LoadAssembly::LoadAssembly()
 void LoadAssembly::load() {
     // Perform CLR initialization
         CLRPointers ptrs = CLRPointers();
-        HRESULT hr = InitializeCLR(L"v4.0.30319", &ptrs);
+        HRESULT hr = LoadAssembly::InitializeCLR(L"v4.0.30319", &ptrs);
 
         // Create a list of points
         Point pts[2] = { Point{1, 5}, Point{5, 5} };
@@ -54,7 +53,7 @@ void LoadAssembly::load() {
 
 
 // Initialize the CLR for the current C++ process
-HRESULT InitializeCLR(const LPCWSTR version, CLRPointers* runtime)
+HRESULT LoadAssembly::InitializeCLR(const LPCWSTR version, CLRPointers* runtime)
 {
     HRESULT hr = CLRCreateInstance(CLSID_CLRMetaHost, IID_PPV_ARGS(&(runtime->MetaHost)));
     if (FAILED(hr))
@@ -94,7 +93,7 @@ HRESULT InitializeCLR(const LPCWSTR version, CLRPointers* runtime)
 }
 
 // Perform the cleanup of the CLR for the current C++ process
-void CleanupCLR(CLRPointers runtime)
+void LoadAssembly::CleanupCLR(CLRPointers runtime)
 {
     if (runtime.MetaHost)
     {
@@ -117,7 +116,7 @@ void CleanupCLR(CLRPointers runtime)
 }
 
 // Call a CLR method (static int name(string arg);)
-HRESULT CallClr(CLRPointers ptrs, const LPCWSTR path, const LPCWSTR className, const LPCWSTR function, const LPCWSTR args)
+HRESULT LoadAssembly::CallClr(CLRPointers ptrs, const LPCWSTR path, const LPCWSTR className, const LPCWSTR function, const LPCWSTR args)
 {
     DWORD dwRet;
     const HRESULT hr = ptrs.RuntimeHost->ExecuteInDefaultAppDomain(path, className, function, args, &dwRet);
@@ -135,7 +134,7 @@ HRESULT CallClr(CLRPointers ptrs, const LPCWSTR path, const LPCWSTR className, c
 }
 
 // Write points to the mmap file
-void WriteData(const MMAPedFile file, Point* points, const int pointCount)
+void LoadAssembly::WriteData(const MMAPedFile file, Point* points, const int pointCount)
 {
     *static_cast<INT32*>(file.MMAPedArea) = pointCount;
     // Skip to first element
@@ -148,7 +147,7 @@ void WriteData(const MMAPedFile file, Point* points, const int pointCount)
 }
 
 // Read lines from the mmap file
-int ReadData(const MMAPedFile file, Line** lines)
+int LoadAssembly::ReadData(const MMAPedFile file, Line** lines)
 {
     const auto lineCount = *static_cast<INT32*>(file.MMAPedArea);
     const auto FileMapping = static_cast<INT32*>(file.MMAPedArea) + 1;
@@ -157,7 +156,7 @@ int ReadData(const MMAPedFile file, Line** lines)
 }
 
 // Create a mmap file
-HRESULT InitMMAP(const LPCWSTR path, const SIZE_T size, MMAPedFile* desc)
+HRESULT LoadAssembly::InitMMAP(const LPCWSTR path, const SIZE_T size, MMAPedFile* desc)
 {
     HANDLE FileMappingHandle;
     LPVOID FileMapping;
