@@ -6,6 +6,7 @@
 #include <QMap>
 #include <QtCore>
 #include <QtWidgets>
+#include <Voronoi.h>
 
 QT_BEGIN_NAMESPACE
 class QPushButton;
@@ -13,6 +14,11 @@ class QLabel;
 class QLineEdit;
 class QTextEdit;
 QT_END_NAMESPACE
+
+struct PointList {
+    Point current;
+    PointList* next;
+};
 
 class VoronoiApp : public QWidget
 {
@@ -25,6 +31,7 @@ public slots:
     void addPoint();
     void saveToFile();
     void generate();
+    void clear();
 
 private:
     QHBoxLayout *topBarLayout;
@@ -44,6 +51,8 @@ private:
     QLabel *pixLabel;
     QPainter *painter;
     QPen *pen;
+
+    QList<Point> *pointList;
 
 };
 

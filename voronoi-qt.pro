@@ -10,15 +10,13 @@ SOURCES += \
     voronoiapp.cpp
 
 HEADERS += \
-    DataTypes.h \
-    lib/Voronoi.h \
+    Voronoi.h \
     voronoiapp.h
 
-DISTFILES += \
-    lib/C5.dll \
-    lib/C5.xml \
-    lib/Voronoi.Interop.dll \
-    lib/Voronoi.Interop.pdb \
-    lib/Voronoi.dll \
-    lib/Voronoi.pdb
+#LIBS += -L"$$PWD/lib/Voronoi.Interop.CPP.lib"
 
+#LIBS += -LVoronoi.Interop.CPP.lib
+
+#LIBS += "D:/Voronoi.Interop.CPP.lib"
+
+LIBS += -L$$PWD -lVoronoi.Interop.CPP

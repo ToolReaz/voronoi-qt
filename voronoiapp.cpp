@@ -1,6 +1,6 @@
 #include <QtWidgets>
 #include <iostream>
-#include <lib/Voronoi.h>
+#include <Voronoi.h>
 #include <voronoiapp.h>
 
 VoronoiApp::VoronoiApp(QWidget *parent) : QWidget(parent)
@@ -101,6 +101,9 @@ VoronoiApp::VoronoiApp(QWidget *parent) : QWidget(parent)
     connect(addCordBtn, &QPushButton::clicked, this, &VoronoiApp::addPoint);
     connect(exportImgBtn, &QPushButton::clicked, this, &VoronoiApp::saveToFile);
     connect(generateBtn, &QPushButton::clicked, this, &VoronoiApp::generate);
+
+    // Create point list
+    pointList = new QList<Point>();
 }
 
 
@@ -133,6 +136,8 @@ void VoronoiApp::addPoint() {
     painter->drawPoint(QPoint(xCord, yCord));
     pixLabel->setPixmap(*pixmap);
 
+    pointList->append({(double)xCord, (double)yCord});
+
     QMessageBox::information(this, "Succes", "Point ajouté !");
 }
 
@@ -151,13 +156,50 @@ void VoronoiApp::saveToFile() {
 }
 
 void VoronoiApp::generate() {
+        VoronoiApp::clear();
 
+        QLibrary myLib("Voronoi.Interop.CPP.dll");
+        typedef void (*MyPrototype)(Point* pts, int points_nb, Line** lines, int* lines_nb, const wchar_t* assembly);
+        MyPrototype myFunction = (MyPrototype) myLib.resolve("fnVoronoiInteropCPP");
+        if (myFunction) {
+            //Point pts[2] = { { 50, 70 }, {150, 70} };
+            Point pts[pointList->length()];
+            for(int i=0; i < pointList->length(); i++) {
+                pts[i] = pointList->at(i);
+            }
+            Line* lines = nullptr;
+            int linesNb = 0;
+
+            /*
+            QString pwd = QDir::currentPath();
+            QMessageBox::information(this, "path!", pwd);
+            pwd.append("Voronoi.Interop.dll");
+            wchar_t w[pwd.length()];
+            pwd.toWCharArray(w);
+            */
+
+           //L"R:\\Voronoi.Interop.dll"
+            myFunction(pts, pointList->length(), &lines, &linesNb, L"R:\\Voronoi.Interop.dll");
+            for(int i = 0; i < linesNb; i++)
+            {
+                //wprintf(L"Line #%d : X1=%f/X2=%f/Y1=%f/Y2=%f\n", i, lines[i].Point1.X, lines[i].Point2.X, lines[i].Point1.Y, lines[i].Point2.Y);
+                painter->drawLine((int)lines[i].Point1.X, (int)lines[i].Point1.Y, (int)lines[i].Point2.X, (int)lines[i].Point2.Y);
+            }
+            pixLabel->setPixmap(*pixmap);
+            QMessageBox::information(this, "Succès!", "Génération réussie");
+        } else  {
+            QMessageBox::warning(this, "Erreur !", "Erreur de chargement de la DLL");
+        }
+
+ /*
         Point pts[2] = { { 5, 7 }, {5, 9} };
 
         Line* lines = nullptr;
         int linesNb = 0;
 
-        fnVoronoiInteropCPP(pts, 2, &lines, &linesNb, L"lib/Voronoi.Interop.dll");
+
+
+        fnVoronoiInteropCPP(pts, 2, &lines, &linesNb, L"D:\\Voronoi.Interop.dll");
 
         for(int i = 0; i < linesNb; i++)
         {
@@ -167,4 +209,27 @@ void VoronoiApp::generate() {
         pixLabel->setPixmap(*pixmap);
 
         QMessageBox::information(this, "Youpi!", "Function1 is alive !!!");
+*/
+}
+
+void VoronoiApp::clear() {
+
+    // Free old pixmap & painter
+    free(pixmap);
+    free(painter);
+
+    // Recreate pixmap
+    pixmap = new QPixmap(780,520);
+    pixmap->fill(QColor(220,220,220,255));
+    // Reassign painter
+    painter = new QPainter(pixmap);
+    painter->setPen(*pen);
+
+    // Redraw points
+    for(int i=0; i < pointList->length(); i++) {
+        painter->drawPoint(QPoint((int)pointList->at(i).X, (int)pointList->at(i).Y));
+    }
+
+    // Redraw pixmap
+    pixLabel->setPixmap(*pixmap);
 }
