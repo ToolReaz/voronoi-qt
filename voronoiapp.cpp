@@ -71,12 +71,17 @@ VoronoiApp::VoronoiApp(QWidget *parent) : QWidget(parent)
     pixmap = new QPixmap(780,520);
     pixmap->fill(QColor(220,220,220,255));
 
-    // Painter & pen
+    // Pens
+    pointPen = new QPen();
+    pointPen->setWidth(8);
+    pointPen->setColor(QColor(56,170,88,255));
+    linePen = new QPen();
+    linePen->setWidth(2);
+    linePen->setColor(QColor(66,114,245,255));
+
+    // Painter
     painter = new QPainter(pixmap);
-    pen = new QPen();
-    pen->setWidth(2);
-    pen->setColor(QColor(255,0,0,255));
-    painter->setPen(*pen);
+    painter->setPen(*pointPen);
     //painter->drawPoint(QPoint(50,50));
 
 
@@ -133,6 +138,7 @@ void VoronoiApp::addPoint() {
     int xCord = spinBoxX->value();
     int yCord = spinBoxY->value();
 
+    painter->setPen(*pointPen);
     painter->drawPoint(QPoint(xCord, yCord));
     pixLabel->setPixmap(*pixmap);
 
@@ -180,6 +186,7 @@ void VoronoiApp::generate() {
 
            //L"R:\\Voronoi.Interop.dll"
             myFunction(pts, pointList->length(), &lines, &linesNb, L"R:\\Voronoi.Interop.dll");
+            painter->setPen(*linePen);
             for(int i = 0; i < linesNb; i++)
             {
                 //wprintf(L"Line #%d : X1=%f/X2=%f/Y1=%f/Y2=%f\n", i, lines[i].Point1.X, lines[i].Point2.X, lines[i].Point1.Y, lines[i].Point2.Y);
@@ -223,7 +230,7 @@ void VoronoiApp::clear() {
     pixmap->fill(QColor(220,220,220,255));
     // Reassign painter
     painter = new QPainter(pixmap);
-    painter->setPen(*pen);
+    painter->setPen(*pointPen);
 
     // Redraw points
     for(int i=0; i < pointList->length(); i++) {

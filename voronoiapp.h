@@ -50,7 +50,8 @@ private:
     QPixmap *pixmap;
     QLabel *pixLabel;
     QPainter *painter;
-    QPen *pen;
+    QPen *pointPen;
+    QPen *linePen;
 
     QList<Point> *pointList;
 
