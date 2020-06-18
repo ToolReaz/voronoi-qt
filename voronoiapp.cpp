@@ -1,7 +1,7 @@
 #include <QtWidgets>
-#include "voronoiapp.h"
-#include "loadassembly.h"
-#include "DataTypes.h"
+#include <iostream>
+#include <lib/Voronoi.h>
+#include <voronoiapp.h>
 
 VoronoiApp::VoronoiApp(QWidget *parent) : QWidget(parent)
 {
@@ -151,60 +151,20 @@ void VoronoiApp::saveToFile() {
 }
 
 void VoronoiApp::generate() {
-    QLibrary dll("D:/Code/voronoi-qt/dll/Voronoi.dll");
-    dll.load();
 
-    typedef Line* (*FunctionPrototype)(Point*);
-    auto function1 = (FunctionPrototype)dll.resolve("GetVoronoi");
+        Point pts[2] = { { 5, 7 }, {5, 9} };
 
-
-    if (function1) {
-        QMessageBox::information(this, "Youpi!", "Function1 is alive !!!");
-    }
-}
-
-void VoronoiApp::useAssembly() {
-
-    loadAssembly = new LoadAssembly();
-
-    // Perform CLR initialization
-        CLRPointers ptrs = CLRPointers();
-        HRESULT hr =  loadAssembly->InitializeCLR(L"v4.0.30319", &ptrs);
-
-        // Create a list of points
-        Point pts[2] = { Point{1, 5}, Point{5, 5} };
-
-        // Create the MMAP file
-        MMAPedFile mmap = MMAPedFile();
-        LPCWSTR path = L"File.dat";
-        hr |= loadAssembly->InitMMAP(path, 1024 * 1024 * sizeof(Line), &mmap);
-
-        // Write the points to the mmap file
-        loadAssembly->WriteData(mmap, pts, 2);
-
-        //Load an assembly and call the required function
-        if (hr == S_OK) // if CLR is started successfully and MMAP is created successfully
-        {
-            loadAssembly->CallClr(
-                ptrs,
-                L"R:\\Voronoi.Interop.dll",
-                L"Voronoi.Interop.EntryPoint",
-                L"GetVoronoi",
-                path);
-        }
-
-        // Fetch computed lines from the mmap file
         Line* lines = nullptr;
-        const auto lineCount = loadAssembly->ReadData(mmap, &lines);
+        int linesNb = 0;
 
-        // Display the fetched lines coord
-        for(auto i = 0; i<lineCount; i++)
+        fnVoronoiInteropCPP(pts, 2, &lines, &linesNb, L"D:\\Voronoi.Interop.dll");
+
+        for(int i = 0; i < linesNb; i++)
         {
             wprintf(L"Line #%d : X1=%f/X2=%f/Y1=%f/Y2=%f\n", i, lines[i].Point1.X, lines[i].Point2.X, lines[i].Point1.Y, lines[i].Point2.Y);
-            painter->drawLine((int)lines[i].Point1.X, (int)lines[i].Point2.X, (int)lines[i].Point1.Y, (int)lines[i].Point2.Y);
-            pixLabel->setPixmap(*pixmap);
+            painter->drawLine(lines[i].Point1.X, lines[i].Point2.X, lines[i].Point1.Y, lines[i].Point2.Y);
         }
+        pixLabel->setPixmap(*pixmap);
 
-        // Perform CLR cleanup
-        loadAssembly->CleanupCLR(ptrs);
+        QMessageBox::information(this, "Youpi!", "Function1 is alive !!!");
 }

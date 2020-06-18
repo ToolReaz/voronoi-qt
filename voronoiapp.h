@@ -6,8 +6,6 @@
 #include <QMap>
 #include <QtCore>
 #include <QtWidgets>
-#include "loadassembly.h"
-#include "DataTypes.h"
 
 QT_BEGIN_NAMESPACE
 class QPushButton;
@@ -27,7 +25,6 @@ public slots:
     void addPoint();
     void saveToFile();
     void generate();
-    void useAssembly();
 
 private:
     QHBoxLayout *topBarLayout;
@@ -47,8 +44,6 @@ private:
     QLabel *pixLabel;
     QPainter *painter;
     QPen *pen;
-
-    LoadAssembly *loadAssembly;
 
 };
 
