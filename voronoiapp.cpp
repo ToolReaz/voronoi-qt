@@ -143,8 +143,6 @@ void VoronoiApp::addPoint() {
     pixLabel->setPixmap(*pixmap);
 
     pointList->append({(double)xCord, (double)yCord});
-
-    QMessageBox::information(this, "Succes", "Point ajouté !");
 }
 
 void VoronoiApp::saveToFile() {
@@ -184,7 +182,6 @@ void VoronoiApp::generate() {
             pwd.toWCharArray(w);
             */
 
-           //L"R:\\Voronoi.Interop.dll"
             myFunction(pts, pointList->length(), &lines, &linesNb, L"R:\\Voronoi.Interop.dll");
             painter->setPen(*linePen);
             for(int i = 0; i < linesNb; i++)
@@ -197,26 +194,6 @@ void VoronoiApp::generate() {
         } else  {
             QMessageBox::warning(this, "Erreur !", "Erreur de chargement de la DLL");
         }
-
- /*
-        Point pts[2] = { { 5, 7 }, {5, 9} };
-
-        Line* lines = nullptr;
-        int linesNb = 0;
-
-
-
-        fnVoronoiInteropCPP(pts, 2, &lines, &linesNb, L"D:\\Voronoi.Interop.dll");
-
-        for(int i = 0; i < linesNb; i++)
-        {
-            wprintf(L"Line #%d : X1=%f/X2=%f/Y1=%f/Y2=%f\n", i, lines[i].Point1.X, lines[i].Point2.X, lines[i].Point1.Y, lines[i].Point2.Y);
-            painter->drawLine(lines[i].Point1.X, lines[i].Point2.X, lines[i].Point1.Y, lines[i].Point2.Y);
-        }
-        pixLabel->setPixmap(*pixmap);
-
-        QMessageBox::information(this, "Youpi!", "Function1 is alive !!!");
-*/
 }
 
 void VoronoiApp::clear() {
