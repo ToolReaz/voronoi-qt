@@ -157,7 +157,7 @@ void VoronoiApp::generate() {
         Line* lines = nullptr;
         int linesNb = 0;
 
-        fnVoronoiInteropCPP(pts, 2, &lines, &linesNb, L"D:\\Voronoi.Interop.dll");
+        fnVoronoiInteropCPP(pts, 2, &lines, &linesNb, L"lib/Voronoi.Interop.dll");
 
         for(int i = 0; i < linesNb; i++)
         {
