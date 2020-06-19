@@ -193,6 +193,7 @@ void VoronoiApp::generate() {
             int linesNb = 0;
 
             /*
+             * TODO: dynamically get current path and find DLLs
             QString pwd = QDir::currentPath();
             QMessageBox::information(this, "path!", pwd);
             pwd.append("Voronoi.Interop.dll");
@@ -200,7 +201,7 @@ void VoronoiApp::generate() {
             pwd.toWCharArray(w);
             */
 
-            myFunction(pts, pointList->length(), &lines, &linesNb, L"R:\\Voronoi.Interop.dll");
+            myFunction(pts, pointList->length(), &lines, &linesNb, L"Voronoi.Interop.dll");
             painter->setPen(*linePen);
             for(int i = 0; i < linesNb; i++)
             {

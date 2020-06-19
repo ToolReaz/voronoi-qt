@@ -13,10 +13,4 @@ HEADERS += \
     Voronoi.h \
     voronoiapp.h
 
-#LIBS += -L"$$PWD/lib/Voronoi.Interop.CPP.lib"
-
-#LIBS += -LVoronoi.Interop.CPP.lib
-
-#LIBS += "D:/Voronoi.Interop.CPP.lib"
-
 LIBS += -L$$PWD -lVoronoi.Interop.CPP
