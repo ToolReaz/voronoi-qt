@@ -126,9 +126,17 @@ void VoronoiApp::loadFromFile() {
             return;
         }
 
-        QDataStream in(&file);
-        in.setVersion(QDataStream::Qt_DefaultCompiledVersion);
-        in >> points;
+        painter->setPen(*pointPen);
+
+        QTextStream in(&file);
+        while(!in.atEnd()) {
+            QString line = in.readLine();
+            QStringList cords = line.split(",");
+            painter->drawPoint(QPoint(cords[0].toInt(), cords[1].toInt()));
+            pointList->append({cords[0].toDouble(), cords[1].toDouble()});
+        }
+
+        pixLabel->setPixmap(*pixmap);
 
         QMessageBox::information(this, "Points chargés !", "hey");
     }
