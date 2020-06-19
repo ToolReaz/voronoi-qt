@@ -153,6 +153,9 @@ void VoronoiApp::addPoint() {
     int xCord = spinBoxX->value();
     int yCord = spinBoxY->value();
 
+    spinBoxX->setValue(0);
+    spinBoxY->setValue(0);
+
     painter->setPen(*pointPen);
     painter->drawPoint(QPoint(xCord, yCord));
     pixLabel->setPixmap(*pixmap);
