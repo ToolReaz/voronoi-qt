@@ -4,5 +4,9 @@
 - Clone the repository
 - Open the project with QT Creator
 - Build
-- Make sure to have ``Voronoi.Interop.CPP.dll`` and ``Voronoi.Interop.dll`` alongside the app executable (i.e: in the build directory of QT Creator)
+- Make sure to have those files alongside the app executable (i.e: in the ``build/debug/`` directory of QT Creator):
+    - ``Voronoi.Interop.CPP.dll``
+    - ``Voronoi.Interop.dll``
+    - ``Voronoi.dll``
+    - ``C5.dll``
 - Run
