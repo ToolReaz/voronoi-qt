@@ -48,6 +48,12 @@ VoronoiApp::VoronoiApp(QWidget *parent) : QWidget(parent)
 
     topBarLayout->addItem(horizontalSpacer);
 
+    flushBtn = new QPushButton();
+    flushBtn->setObjectName(QString::fromUtf8("flushBtn"));
+    flushBtn->setText("Effacer");
+
+    topBarLayout->addWidget(flushBtn);
+
     generateBtn = new QPushButton();
     generateBtn->setObjectName(QString::fromUtf8("generateBtn"));
     generateBtn->setText("Générer");
@@ -106,6 +112,7 @@ VoronoiApp::VoronoiApp(QWidget *parent) : QWidget(parent)
     connect(addCordBtn, &QPushButton::clicked, this, &VoronoiApp::addPoint);
     connect(exportImgBtn, &QPushButton::clicked, this, &VoronoiApp::saveToFile);
     connect(generateBtn, &QPushButton::clicked, this, &VoronoiApp::generate);
+    connect(flushBtn, &QPushButton::clicked, this, &VoronoiApp::flush);
 
     // Create point list
     pointList = new QList<Point>();
@@ -224,4 +231,15 @@ void VoronoiApp::clear() {
 
     // Redraw pixmap
     pixLabel->setPixmap(*pixmap);
+}
+
+void VoronoiApp::flush() {
+
+    QMessageBox::StandardButton confirm = QMessageBox::question(this, "Confirmation", "Ceci supprimera les points placés. Êtes vous sûr ?", QMessageBox::Yes | QMessageBox::No);
+
+    if (confirm == QMessageBox::Yes) {
+        free(pointList);
+        pointList = new QList<Point>();
+        VoronoiApp::clear();
+    }
 }

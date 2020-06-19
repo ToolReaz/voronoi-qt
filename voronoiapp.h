@@ -32,6 +32,7 @@ public slots:
     void saveToFile();
     void generate();
     void clear();
+    void flush();
 
 private:
     QHBoxLayout *topBarLayout;
@@ -45,6 +46,7 @@ private:
     QPushButton *importFileBtn;
     QPushButton *exportImgBtn;
     QPushButton *generateBtn;
+    QPushButton *flushBtn;
 
     QMap<QString, QString> points;
     QPixmap *pixmap;
