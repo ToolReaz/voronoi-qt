@@ -11,6 +11,8 @@
     - ``C5.dll``
 - Run
 
+This program uses the [C5 Generic Collection Library](https://itu.dk/research/c5/)
+
 ## Contributors
 - [GitKepler](https://github.com/GitKepler)
 - [ToolReaz](https://github.com/ToolReaz)
