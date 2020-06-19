@@ -10,3 +10,7 @@
     - ``Voronoi.dll``
     - ``C5.dll``
 - Run
+
+## Contributors
+- [GitKepler](https://github.com/GitKepler)
+- [ToolReaz](https://github.com/ToolReaz)
